@@ -7,8 +7,6 @@
   const pinWidth = Number((getComputedStyle(mainPin).width).slice(0, -2));
   const pinHeight = Number((getComputedStyle(mainPin).height).slice(0, -2));
 
-  const ADVERTISEMENTS_NUMBER = 8;
-
   const PriceLimits = {
     MIN: 1000,
     MAX: 1000000

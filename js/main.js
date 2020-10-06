@@ -7,6 +7,9 @@
   const mapFilters = map.querySelectorAll(`.map__filter`);
   const mainPin = map.querySelector(`.map__pin--main`);
   const mainButtonMouseEventCode = 0;
+  const ADVERTISEMENTS_NUMBER = 8;
+  const advertisements = window.data.createData(ADVERTISEMENTS_NUMBER);
+  console.log(advertisements);
 
   const deactivateElements = (fields) => fields.forEach((field) => field.setAttribute(`disabled`, true));
   const activateElements = (fields) => fields.forEach((field) => field.removeAttribute(`disabled`));
@@ -22,7 +25,8 @@
     mainPin.addEventListener(`mousedown`, ((evt) => {
       if (evt.button === mainButtonMouseEventCode) {
         activatePage();
-        // setAddress(mainPin);
+        window.form.setAddress(mainPin);
+        window.pin.makePins(ADVERTISEMENTS_NUMBER, advertisements);
       }
     }));
 
@@ -46,5 +50,3 @@
 })();
 
 window.main.pageDeactivation();
-
-

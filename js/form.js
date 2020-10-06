@@ -92,5 +92,4 @@
   window.form = {
     setAddress
   };
-  window.form.setAddress(mainPin);
 })();
