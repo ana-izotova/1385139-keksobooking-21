@@ -40,7 +40,6 @@ const GALLERY = [
 ];
 const descriptions = [`Стильно!`, `Модно!`, `Молодежно!`, `Прикольно!`];
 
-const map = document.querySelector(`.map`);
 const mapWidth = Math.floor(Number((getComputedStyle(map).width).slice(0, -2)));
 const mapPins = map.querySelector(`.map__pins`);
 
@@ -48,7 +47,6 @@ const pinTemplate = document.querySelector(`#pin`)
   .content
   .querySelector(`.map__pin`);
 
-const mainPin = map.querySelector(`.map__pin--main`);
 const pinWidth = Number((getComputedStyle(mainPin).width).slice(0, -2));
 const pinHeight = Number((getComputedStyle(mainPin).height).slice(0, -2));
 const fragment = document.createDocumentFragment();
@@ -168,7 +166,6 @@ const createCard = (info) => {
   map.insertBefore(newCard, filtersContainer);
 };
 
-const advertisements = createAdvertisements(ADVERTISEMENTS_NUMBER);
-map.classList.remove(`map--faded`);
-makePins(ADVERTISEMENTS_NUMBER);
-createCard(advertisements[0]);
+// const advertisements = createAdvertisements(ADVERTISEMENTS_NUMBER);
+// makePins(ADVERTISEMENTS_NUMBER);
+// createCard(advertisements[0]);
