@@ -2,18 +2,25 @@
 
 (() => {
   const MainPinSize = {
-    WIDTH: 62,
-    HEIGHT: 84
+    WIDTH: 65,
+    HEIGHT: 65,
+    TAIL: 22
   };
 
-  const findCoordinates = (pin) => {
-    const coordinates = pin.getBoundingClientRect();
-    const coordX = Math.round(coordinates.left + MainPinSize.WIDTH / 2);
-    const coordY = Math.round(coordinates.top + MainPinSize.HEIGHT);
-    return [coordX, coordY].join(`, `);
+  const findPinCenterCoordinates = (pin) => {
+    const x = Math.round(parseInt(pin.style.left, 10) + pin.offsetWidth / 2);
+    const y = Math.round(parseInt(pin.style.top, 10) + pin.offsetHeight / 2);
+    return [x, y].join(`, `);
+  };
+
+  const findPinCoordinates = (pin) => {
+    const x = Math.round(parseInt(pin.style.left, 10) + pin.offsetWidth / 2);
+    const y = Math.round(parseInt(pin.style.top, 10) + pin.offsetHeight + MainPinSize.TAIL);
+    return [x, y].join(`, `);
   };
 
   window.map = {
-    findPinCoordinates: findCoordinates
+    findPinCenterCoordinates,
+    findPinCoordinates
   };
 })();

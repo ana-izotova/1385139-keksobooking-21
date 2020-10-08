@@ -2,10 +2,7 @@
 
 (() => {
   const map = document.querySelector(`.map`);
-  const mapWidth = Math.floor(Number((getComputedStyle(map).width).slice(0, -2)));
-  const mainPin = map.querySelector(`.map__pin--main`);
-  const pinWidth = Number((getComputedStyle(mainPin).width).slice(0, -2));
-  const pinHeight = Number((getComputedStyle(mainPin).height).slice(0, -2));
+  const mapWidth = map.offsetWidth;
 
   const PriceLimits = {
     MIN: 1000,
@@ -62,7 +59,7 @@
   const createAdvertisements = (amount) => {
     const advertisements = [];
     for (let i = 1; i <= amount; i += 1) {
-      const locationX = getRandomIntInclusive(pinWidth, mapWidth - pinWidth * 1.5);
+      const locationX = getRandomIntInclusive(0, mapWidth);
       const locationY = getRandomIntInclusive(LocationY.MIN, LocationY.MAX);
       advertisements.push({
         author: {

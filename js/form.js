@@ -1,8 +1,6 @@
 'use strict';
 
 (() => {
-  const map = document.querySelector(`.map`);
-  const mainPin = map.querySelector(`.map__pin--main`);
   const adForm = document.querySelector(`.ad-form`);
   const titleInput = adForm.querySelector(`#title`);
   const priceInput = adForm.querySelector(`#price`);
@@ -26,24 +24,23 @@
     MAX_PRICE: 1000000
   };
 
-  const addressField = document.querySelector(`#address`);
-
-  const setAddress = (pin) => {
-    const coordinates = window.map.findPinCoordinates(pin);
-    addressField.value = coordinates;
+  const roomForGuestsMap = {
+    1: [`1`],
+    2: [`1`, `2`],
+    3: [`1`, `2`, `3`],
+    100: [`0`]
   };
 
-  titleInput.addEventListener(`invalid`, () => {
-    if (titleInput.validity.tooShort) {
-      titleInput.setCustomValidity(`Минимальная длина заголовка - 30 символов`);
-    } else if (titleInput.validity.tooLong) {
-      titleInput.setCustomValidity(`Максимальная длина заголовка - 100 символов`);
-    } else if (titleInput.validity.valueMissing) {
-      titleInput.setCustomValidity(`Обязательное поле`);
-    } else {
-      titleInput.setCustomValidity(``);
+  const addressField = document.querySelector(`#address`);
+
+  const setAddress = (pin, center = false) => {
+    addressField.value = window.map.findPinCoordinates(pin);
+    if (center) {
+      addressField.value = window.map.findPinCenterCoordinates(pin);
     }
-  });
+  };
+
+  addressField.setAttribute(`readonly`, true);
 
   titleInput.addEventListener(`input`, () => {
     const valueLength = titleInput.value.length;
@@ -57,6 +54,18 @@
     titleInput.reportValidity();
   });
 
+  // titleInput.addEventListener(`invalid`, () => {
+  //   if (titleInput.validity.tooShort) {
+  //     titleInput.setCustomValidity(`Минимальная длина заголовка - 30 символов`);
+  //   } else if (titleInput.validity.tooLong) {
+  //     titleInput.setCustomValidity(`Максимальная длина заголовка - 100 символов`);
+  //   } else if (titleInput.validity.valueMissing) {
+  //     titleInput.setCustomValidity(`Обязательное поле`);
+  //   } else {
+  //     titleInput.setCustomValidity(``);
+  //   }
+  // });
+
   // box-shadow: 0 0 2px 2px #ff6547;
 
   const setMinimumPrice = () => {
@@ -65,9 +74,11 @@
     priceInput.placeholder = minPrice;
   };
 
-  typeInput.onchange = () => {
+  setMinimumPrice();
+
+  typeInput.addEventListener(`change`, () => {
     setMinimumPrice();
-  };
+  });
 
   priceInput.addEventListener(`invalid`, () => {
     const minPrice = priceInput.getAttribute(`min`);
@@ -81,13 +92,25 @@
     titleInput.reportValidity();
   });
 
-  timein.onchange = () => {
+  timein.addEventListener(`change`, () => {
     timeout.value = timein.value;
-  };
+  });
 
-  timeout.onchange = () => {
+  timeout.addEventListener(`change`, () => {
     timein.value = timeout.value;
+  });
+
+  const setRoomCapasity = (value) => {
+    capacityOptions.forEach((option) => {
+      option.disabled = !roomForGuestsMap[value].includes(option.value);
+    });
+    capacity.value = value > 3 ? 0 : value;
   };
+  setRoomCapasity(roomNumber.value);
+
+  roomNumber.addEventListener(`change`, () => {
+    setRoomCapasity(roomNumber.value);
+  });
 
   window.form = {
     setAddress
