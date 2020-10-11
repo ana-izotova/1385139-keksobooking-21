@@ -42,7 +42,7 @@
 
   addressField.setAttribute(`readonly`, true);
 
-  titleInput.addEventListener(`input`, () => {
+  const validateTitle = () => {
     const valueLength = titleInput.value.length;
     if (valueLength < TitleLength.MIN) {
       titleInput.setCustomValidity((`Ещё ` + (TitleLength.MIN - valueLength) + ` символов`));
@@ -52,7 +52,7 @@
       titleInput.setCustomValidity(``);
     }
     titleInput.reportValidity();
-  });
+  };
 
   // titleInput.addEventListener(`invalid`, () => {
   //   if (titleInput.validity.tooShort) {
@@ -76,20 +76,38 @@
 
   setMinimumPrice();
 
-  typeInput.addEventListener(`change`, () => {
-    setMinimumPrice();
-  });
-
-  priceInput.addEventListener(`invalid`, () => {
+  const validatePrice = () => {
     const minPrice = priceInput.getAttribute(`min`);
     if (priceInput.value < minPrice) {
       priceInput.setCustomValidity((`Минимальная стоимость - ${minPrice}`));
     } else if (priceInput.value > PriceLimits.MAX_PRICE) {
-      titleInput.setCustomValidity(`Стоимость не может быть выше ${PriceLimits.MAX_PRICE}`);
+      priceInput.setCustomValidity(`Стоимость не может быть выше ${PriceLimits.MAX_PRICE}`);
     } else {
-      titleInput.setCustomValidity(``);
+      priceInput.setCustomValidity(``);
     }
-    titleInput.reportValidity();
+    priceInput.reportValidity();
+  };
+
+  const setRoomCapasity = (value) => {
+    capacityOptions.forEach((option) => {
+      option.disabled = !roomForGuestsMap[value].includes(option.value);
+    });
+    capacity.value = value > 3 ? 0 : value;
+  };
+
+  setRoomCapasity(roomNumber.value);
+
+  titleInput.addEventListener(`input`, () => {
+    validateTitle();
+  });
+
+  typeInput.addEventListener(`change`, () => {
+    setMinimumPrice();
+    validatePrice();
+  });
+
+  priceInput.addEventListener(`input`, () => {
+    validatePrice();
   });
 
   timein.addEventListener(`change`, () => {
@@ -99,14 +117,6 @@
   timeout.addEventListener(`change`, () => {
     timein.value = timeout.value;
   });
-
-  const setRoomCapasity = (value) => {
-    capacityOptions.forEach((option) => {
-      option.disabled = !roomForGuestsMap[value].includes(option.value);
-    });
-    capacity.value = value > 3 ? 0 : value;
-  };
-  setRoomCapasity(roomNumber.value);
 
   roomNumber.addEventListener(`change`, () => {
     setRoomCapasity(roomNumber.value);

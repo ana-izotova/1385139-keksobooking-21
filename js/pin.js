@@ -20,6 +20,7 @@
       newPin.style.left = `${cardsData[i].location.x - (PinSize.WIDTH / 2)}px`;
       pinImg.src = cardsData[i].author.avatar;
       pinImg.alt = cardsData[i].offer.title;
+      newPin.hidden = true;
       fragment.appendChild(newPin);
     }
 
