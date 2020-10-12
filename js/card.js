@@ -15,6 +15,9 @@
   const filtersContainer = map.querySelector(`.map__filters-container`);
 
   const createCard = (info) => {
+    if (map.querySelector(`.map__card`)) {
+      map.removeChild(map.querySelector(`.map__card`));
+    }
     const newCard = cardTemplate.cloneNode(true);
     newCard.querySelector(`.popup__title`).textContent = info.offer.title;
     newCard.querySelector(`.popup__text--address`).textContent = info.offer.address;
@@ -44,8 +47,33 @@
     map.insertBefore(newCard, filtersContainer);
   };
 
+  const onPopupEscPress = (evt) => {
+    if (evt.key === `Escape`) {
+      evt.preventDefault();
+      closePopup();
+    }
+  };
+
+  const closePopup = () => {
+    const cardPopup = map.querySelector(`.map__card`);
+    cardPopup.remove();
+    document.removeEventListener(`keydown`, onPopupEscPress);
+  };
+
+  const openPopup = (data) => {
+    if (map.querySelector(`.map__card`)) {
+      map.querySelector(`.map__card`).remove();
+    }
+    createCard(data);
+    const cardPopup = map.querySelector(`.map__card`);
+    const closePopupButton = cardPopup.querySelector(`.popup__close`);
+    document.addEventListener(`keydown`, onPopupEscPress);
+    closePopupButton.addEventListener(`click`, closePopup);
+  };
+
   window.card = {
-    createCard
+    createCard,
+    openPopup
   };
 })();
 
