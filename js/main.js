@@ -61,3 +61,4 @@
 })();
 
 window.main.pageDeactivation();
+// 5-1 задание выполнено
