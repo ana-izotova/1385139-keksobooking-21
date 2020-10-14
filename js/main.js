@@ -38,6 +38,7 @@
     mainPin.addEventListener(`mousedown`, ((evt) => {
       if (evt.button === mainButtonMouseEventCode) {
         activatePage();
+        window.pin.moveMainPin(evt);
       }
     }));
 
@@ -61,4 +62,3 @@
 })();
 
 window.main.pageDeactivation();
-// 5-1 задание выполнено
