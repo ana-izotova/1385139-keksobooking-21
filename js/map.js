@@ -14,7 +14,7 @@
   };
 
   const findPinCoordinates = (pin) => {
-    const x = Math.round(parseInt(pin.style.left, 10) + pin.offsetWidth / 2);
+    const x = Math.round(parseInt(pin.style.left, 10) + pin.offsetWidth);
     const y = Math.round(parseInt(pin.style.top, 10) + pin.offsetHeight + MainPinSize.TAIL);
     return [x, y].join(`, `);
   };

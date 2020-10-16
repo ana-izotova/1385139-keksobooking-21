@@ -19,6 +19,7 @@
       map.removeChild(map.querySelector(`.map__card`));
     }
     const newCard = cardTemplate.cloneNode(true);
+    newCard.querySelector(`.popup__avatar`).src = info.author.avatar;
     newCard.querySelector(`.popup__title`).textContent = info.offer.title;
     newCard.querySelector(`.popup__text--address`).textContent = info.offer.address;
     newCard.querySelector(`.popup__text--price`).textContent = `${info.offer.price}₽/ночь`;
