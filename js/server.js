@@ -34,7 +34,7 @@
     xhr.send();
   };
 
-  window.xhr = {
+  window.server = {
     load
   };
 })();
