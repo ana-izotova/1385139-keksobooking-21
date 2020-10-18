@@ -77,10 +77,12 @@
   setMinimumPrice();
 
   const validatePrice = () => {
-    const minPrice = priceInput.getAttribute(`min`);
-    if (priceInput.value < minPrice) {
+    const minPrice = Number(priceInput.getAttribute(`min`));
+    const value = Number(priceInput.value);
+
+    if (value < minPrice) {
       priceInput.setCustomValidity((`Минимальная стоимость - ${minPrice}`));
-    } else if (priceInput.value > PriceLimits.MAX_PRICE) {
+    } else if (value > PriceLimits.MAX_PRICE) {
       priceInput.setCustomValidity(`Стоимость не может быть выше ${PriceLimits.MAX_PRICE}`);
     } else {
       priceInput.setCustomValidity(``);

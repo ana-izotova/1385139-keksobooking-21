@@ -9,13 +9,6 @@
     HEIGHT: 70
   };
 
-  const MapLimits = {
-    TOP: 130,
-    BOTTOM: 630,
-    left: map.offsetLeft - (mainPin.offsetWidth / 2),
-    right: map.offsetWidth - (mainPin.offsetWidth / 2)
-  };
-
   const pinTemplate = document.querySelector(`#pin`)
     .content
     .querySelector(`.map__pin`);
@@ -38,7 +31,6 @@
 
   const moveMainPin = (evt) => {
     evt.preventDefault();
-
     let startCoords = {
       x: evt.pageX,
       y: evt.pageY
@@ -47,53 +39,20 @@
     const onMouseMove = (moveEvt) => {
       moveEvt.preventDefault();
 
-      // const newLocation = {
-      //   x: MapLimits.left,
-      //   y: MapLimits.right
-      // };
-      //
-      // if (moveEvt.pageX > MapLimits.right) {
-      //   newLocation.x = MapLimits.right;
-      // } else if (moveEvt.pageX > MapLimits.left) {
-      //   newLocation.x = moveEvt.pageX;
-      // }
-      //
-      // if (moveEvt.pageY > MapLimits.BOTTOM) {
-      //   newLocation.y = MapLimits.BOTTOM;
-      // } else if (moveEvt.pageY > MapLimits.TOP) {
-      //   newLocation.y = moveEvt.pageY;
-      // }
-      //
-      // mainPin.style.top = `${newLocation.y}px`;
-      // mainPin.style.left = `${newLocation.x}px`;
-
-      // function move(e) {
-      //   var newLocation = {
-      //     x: limits.left,
-      //     y: limits.top
-      //   };
-      //   if (e.pageX > limits.right) {
-      //     newLocation.x = limits.right;
-      //   } else if (e.pageX > limits.left) {
-      //     newLocation.x = e.pageX;
-      //   }
-      //   if (e.pageY > limits.bottom) {
-      //     newLocation.y = limits.bottom;
-      //   } else if (e.pageY > limits.top) {
-      //     newLocation.y = e.pageY;
-      //   }
-      //   relocate(newLocation);
-      // }
+      const MapLimits = {
+        TOP: 130,
+        BOTTOM: 630,
+        left: -(mainPin.offsetWidth / 2),
+        right: map.offsetWidth - (mainPin.offsetWidth / 2)
+      };
 
       const shift = {
         x: startCoords.x - moveEvt.pageX,
         y: startCoords.y - moveEvt.pageY
       };
 
-      startCoords = {
-        x: moveEvt.pageX,
-        y: moveEvt.pageY
-      };
+      startCoords.x = moveEvt.pageX;
+      startCoords.y = moveEvt.pageY;
 
       let newCoordY = mainPin.offsetTop - shift.y;
       let newCoordX = mainPin.offsetLeft - shift.x;
@@ -125,3 +84,4 @@
     moveMainPin
   };
 })();
+
