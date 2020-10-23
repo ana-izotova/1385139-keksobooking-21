@@ -72,19 +72,6 @@
     map.insertBefore(newCard, filtersContainer);
   };
 
-  const onPopupEscPress = (evt) => {
-    if (evt.key === `Escape`) {
-      evt.preventDefault();
-      closePopup();
-    }
-  };
-
-  const closePopup = () => {
-    const cardPopup = map.querySelector(`.map__card`);
-    cardPopup.remove();
-    document.removeEventListener(`keydown`, onPopupEscPress);
-  };
-
   const openPopup = (data) => {
     if (map.querySelector(`.map__card`)) {
       map.querySelector(`.map__card`).remove();
@@ -92,8 +79,12 @@
     createCard(data);
     const cardPopup = map.querySelector(`.map__card`);
     const closePopupButton = cardPopup.querySelector(`.popup__close`);
-    document.addEventListener(`keydown`, onPopupEscPress);
-    closePopupButton.addEventListener(`click`, closePopup);
+    document.addEventListener(`keydown`, (evt) => {
+      window.utils.onPopupEscPress(evt, `.map__card`);
+    });
+    closePopupButton.addEventListener(`click`, () => {
+      window.utils.closePopup(`.map__card`);
+    });
   };
 
   window.card = {

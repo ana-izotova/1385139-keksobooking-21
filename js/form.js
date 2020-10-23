@@ -54,20 +54,6 @@
     titleInput.reportValidity();
   };
 
-  // titleInput.addEventListener(`invalid`, () => {
-  //   if (titleInput.validity.tooShort) {
-  //     titleInput.setCustomValidity(`Минимальная длина заголовка - 30 символов`);
-  //   } else if (titleInput.validity.tooLong) {
-  //     titleInput.setCustomValidity(`Максимальная длина заголовка - 100 символов`);
-  //   } else if (titleInput.validity.valueMissing) {
-  //     titleInput.setCustomValidity(`Обязательное поле`);
-  //   } else {
-  //     titleInput.setCustomValidity(``);
-  //   }
-  // });
-
-  // box-shadow: 0 0 2px 2px #ff6547;
-
   const setMinimumPrice = () => {
     const minPrice = PriceLimits[typeInput.value];
     priceInput.setAttribute(`min`, minPrice);
@@ -124,7 +110,45 @@
     setRoomCapasity(roomNumber.value);
   });
 
+  const successMessageTemplate = document.querySelector(`#success`)
+    .content
+    .querySelector(`.success`);
+
+  const errorMessageTemplate = document.querySelector(`#error`)
+    .content
+    .querySelector(`.error`);
+
+  const successUploadHandler = (pageDeactivation) => {
+    const newSuccessMessage = successMessageTemplate.cloneNode(true);
+    document.body.insertAdjacentElement(`afterbegin`, newSuccessMessage);
+    document.addEventListener(`keydown`, (evt) => {
+      window.utils.onPopupEscPress(evt, `.success`);
+      adForm.reset();
+      pageDeactivation();
+    });
+    document.addEventListener(`click`, () => {
+      window.utils.closePopup(`.success`);
+      adForm.reset();
+      pageDeactivation();
+    });
+  };
+
+  const errorUploadHandler = () => {
+    const newErrorMessage = errorMessageTemplate.cloneNode(true);
+    const errorButton = newErrorMessage.querySelector(`.error__button`);
+    document.body.insertAdjacentElement(`afterbegin`, newErrorMessage);
+    errorButton.addEventListener(`click`, window.utils.closePopup(`.error`));
+    document.addEventListener(`keydown`, (evt) => {
+      window.utils.onPopupEscPress(evt, `.error`);
+    });
+    document.addEventListener(`click`, () => {
+      window.utils.closePopup(`.error`);
+    });
+  };
+
   window.form = {
-    setAddress
+    setAddress,
+    successUploadHandler,
+    errorUploadHandler
   };
 })();

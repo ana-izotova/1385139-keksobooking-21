@@ -8,15 +8,15 @@
   const mainPin = map.querySelector(`.map__pin--main`);
   const pinsContainer = map.querySelector(`.map__pins`);
   const mainButtonMouseEventCode = 0;
+  const ADVERTISEMENTS_AMOUNT = 5;
 
-  const successHandler = (data) => {
-    window.data.serverData = data.filter((item) => item.offer);
-    window.data.amount = data.length;
-    window.pin.makePins(window.data.amount, data);
+  const successLoadHandler = (data) => {
+    window.data.serverData = data.filter((item) => item.offer).slice(0, 5);
+    window.pin.makePins(ADVERTISEMENTS_AMOUNT, data);
     pageDeactivation();
   };
 
-  const errorHandler = (errorMessage) => {
+  const errorLoadHandler = (errorMessage) => {
     const node = document.createElement(`div`);
     node.style = `
     z-index: 100;
@@ -40,7 +40,7 @@
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
-  window.server.load(successHandler, errorHandler);
+  window.server.load(successLoadHandler, errorLoadHandler);
 
   const deactivateElements = (fields) => {
     [...fields].forEach((field) => field.setAttribute(`disabled`, true));
@@ -86,4 +86,10 @@
     deactivateElements(mapFilters.children);
     pageActivationHandlers();
   };
+
+  adForm.addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    const data = new FormData(adForm);
+    window.server.upload(data, window.form.successUploadHandler(pageDeactivation), window.form.errorUploadHandler);
+  });
 })();

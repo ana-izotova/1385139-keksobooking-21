@@ -3,7 +3,7 @@
 (() => {
   const Url = {
     LOAD: `https://21.javascript.pages.academy/keksobooking/data`,
-    UPLOAD: `https://javascript.pages.academy/keksobooking`
+    UPLOAD: `https://21.javascript.pages.academy/keksobooking`
   };
   const StatusCode = {
     OK: 200
@@ -34,7 +34,24 @@
     xhr.send();
   };
 
+  const upload = (data, onSuccess, onError) => {
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = `json`;
+
+    xhr.addEventListener(`load`, function () {
+      if (xhr.status === StatusCode.OK) {
+        onSuccess();
+      } else {
+        onError();
+      }
+    });
+
+    xhr.open(`POST`, Url.UPLOAD);
+    xhr.send(data);
+  };
+
   window.server = {
-    load
+    load,
+    upload
   };
 })();
