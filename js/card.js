@@ -5,7 +5,7 @@
     .content
     .querySelector(`.map__card`);
 
-  const apartmentsTypesDictionary = {
+  const apartmentsType = {
     palace: `Дворец`,
     flat: `Квартира`,
     house: `Дом`,
@@ -33,7 +33,7 @@
     price.textContent = info.offer.price ? `${info.offer.price}₽/ночь` : price.remove();
 
     const type = newCard.querySelector(`.popup__type`);
-    type.textContent = info.offer.type ? apartmentsTypesDictionary[info.offer.type] : type.remove();
+    type.textContent = info.offer.type ? apartmentsType[info.offer.type] : type.remove();
 
     let rooms = (info.offer.rooms === 1) ? `комната` : `комнаты`;
     let guests = (info.offer.guests === 1) ? `гостя` : `гостей`;

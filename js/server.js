@@ -3,15 +3,20 @@
 (() => {
   const Url = {
     LOAD: `https://21.javascript.pages.academy/keksobooking/data`,
-    UPLOAD: `https://21.javascript.pages.academy/keksobooking`
+    SEND: `https://21.javascript.pages.academy/keksobooking`
   };
   const StatusCode = {
     OK: 200
   };
+
+  const HttpRequestMethod = {
+    LOAD: `GET`,
+    SEND: `POST`
+  };
+
   const TIMEOUT_IN_MS = 10000;
 
-  const load = (onSuccess, onError) => {
-    const xhr = new XMLHttpRequest();
+  const server = (xhr, onSuccess, onError) => {
     xhr.responseType = `json`;
 
     xhr.addEventListener(`load`, () => {
@@ -29,29 +34,26 @@
     });
 
     xhr.timeout = TIMEOUT_IN_MS;
-
-    xhr.open(`GET`, Url.LOAD);
-    xhr.send();
   };
 
-  const upload = (data, onSuccess, onError) => {
-    const xhr = new XMLHttpRequest();
-    xhr.responseType = `json`;
+  const load = (onSuccess, onError) => {
+    const xhrLoad = new XMLHttpRequest();
 
-    xhr.addEventListener(`load`, function () {
-      if (xhr.status === StatusCode.OK) {
-        onSuccess();
-      } else {
-        onError();
-      }
-    });
+    xhrLoad.open(HttpRequestMethod.LOAD, Url.LOAD);
+    server(xhrLoad, onSuccess, onError);
+    xhrLoad.send();
+  };
 
-    xhr.open(`POST`, Url.UPLOAD);
-    xhr.send(data);
+  const send = (data, onSuccess, onError) => {
+    const xhrSend = new XMLHttpRequest();
+
+    xhrSend.open(HttpRequestMethod.SEND, Url.SEND);
+    server(xhrSend, onSuccess, onError);
+    xhrSend.send(data);
   };
 
   window.server = {
     load,
-    upload
+    send
   };
 })();

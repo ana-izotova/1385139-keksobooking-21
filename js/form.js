@@ -16,7 +16,7 @@
     MAX: 100
   };
 
-  const PriceLimits = {
+  const PriceLimit = {
     bungalow: 0,
     flat: 1000,
     house: 5000,
@@ -55,7 +55,7 @@
   };
 
   const setMinimumPrice = () => {
-    const minPrice = PriceLimits[typeInput.value];
+    const minPrice = PriceLimit[typeInput.value];
     priceInput.setAttribute(`min`, minPrice);
     priceInput.placeholder = minPrice;
   };
@@ -68,8 +68,8 @@
 
     if (value < minPrice) {
       priceInput.setCustomValidity((`Минимальная стоимость - ${minPrice}`));
-    } else if (value > PriceLimits.MAX_PRICE) {
-      priceInput.setCustomValidity(`Стоимость не может быть выше ${PriceLimits.MAX_PRICE}`);
+    } else if (value > PriceLimit.MAX_PRICE) {
+      priceInput.setCustomValidity(`Стоимость не может быть выше ${PriceLimit.MAX_PRICE}`);
     } else {
       priceInput.setCustomValidity(``);
     }
@@ -110,45 +110,7 @@
     setRoomCapasity(roomNumber.value);
   });
 
-  const successMessageTemplate = document.querySelector(`#success`)
-    .content
-    .querySelector(`.success`);
-
-  const errorMessageTemplate = document.querySelector(`#error`)
-    .content
-    .querySelector(`.error`);
-
-  const successUploadHandler = (pageDeactivation) => {
-    const newSuccessMessage = successMessageTemplate.cloneNode(true);
-    document.body.insertAdjacentElement(`afterbegin`, newSuccessMessage);
-    document.addEventListener(`keydown`, (evt) => {
-      window.utils.onPopupEscPress(evt, `.success`);
-      adForm.reset();
-      pageDeactivation();
-    });
-    document.addEventListener(`click`, () => {
-      window.utils.closePopup(`.success`);
-      adForm.reset();
-      pageDeactivation();
-    });
-  };
-
-  const errorUploadHandler = () => {
-    const newErrorMessage = errorMessageTemplate.cloneNode(true);
-    const errorButton = newErrorMessage.querySelector(`.error__button`);
-    document.body.insertAdjacentElement(`afterbegin`, newErrorMessage);
-    errorButton.addEventListener(`click`, window.utils.closePopup(`.error`));
-    document.addEventListener(`keydown`, (evt) => {
-      window.utils.onPopupEscPress(evt, `.error`);
-    });
-    document.addEventListener(`click`, () => {
-      window.utils.closePopup(`.error`);
-    });
-  };
-
   window.form = {
-    setAddress,
-    successUploadHandler,
-    errorUploadHandler
+    setAddress
   };
 })();
