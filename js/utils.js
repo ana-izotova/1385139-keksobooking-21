@@ -1,20 +1,6 @@
 'use strict';
 
 (() => {
-  const onPopupEscPress = (evt, selector) => {
-    if (evt.key === `Escape`) {
-      evt.preventDefault();
-      closePopup(selector);
-      document.removeEventListener(`keydown`, onPopupEscPress);
-    }
-  };
-
-  const closePopup = (selector) => {
-    document.body.querySelector(selector).remove();
-    document.removeEventListener(`keydown`, onPopupEscPress);
-    // document.removeEventListener(`click`, closePopup);
-  };
-
   const errorLoadHandler = (errorMessage) => {
     const node = document.createElement(`div`);
     node.style.cssText = `
@@ -40,8 +26,6 @@
   };
 
   window.utils = {
-    closePopup,
-    onPopupEscPress,
     errorLoadHandler
   };
 })();
