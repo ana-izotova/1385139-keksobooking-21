@@ -10,13 +10,15 @@
   const roomNumber = adForm.querySelector(`#room_number`);
   const capacity = adForm.querySelector(`#capacity`);
   const capacityOptions = capacity.querySelectorAll(`option`);
+  const map = document.querySelector(`.map`);
+  const mainPin = map.querySelector(`.map__pin--main`);
 
   const TitleLength = {
     MIN: 30,
     MAX: 100
   };
 
-  const PriceLimits = {
+  const PriceLimit = {
     bungalow: 0,
     flat: 1000,
     house: 5000,
@@ -39,6 +41,7 @@
       addressField.value = window.map.findPinCenterCoordinates(pin);
     }
   };
+  setAddress(mainPin, true);
 
   addressField.setAttribute(`readonly`, true);
 
@@ -54,22 +57,8 @@
     titleInput.reportValidity();
   };
 
-  // titleInput.addEventListener(`invalid`, () => {
-  //   if (titleInput.validity.tooShort) {
-  //     titleInput.setCustomValidity(`Минимальная длина заголовка - 30 символов`);
-  //   } else if (titleInput.validity.tooLong) {
-  //     titleInput.setCustomValidity(`Максимальная длина заголовка - 100 символов`);
-  //   } else if (titleInput.validity.valueMissing) {
-  //     titleInput.setCustomValidity(`Обязательное поле`);
-  //   } else {
-  //     titleInput.setCustomValidity(``);
-  //   }
-  // });
-
-  // box-shadow: 0 0 2px 2px #ff6547;
-
   const setMinimumPrice = () => {
-    const minPrice = PriceLimits[typeInput.value];
+    const minPrice = PriceLimit[typeInput.value];
     priceInput.setAttribute(`min`, minPrice);
     priceInput.placeholder = minPrice;
   };
@@ -77,13 +66,14 @@
   setMinimumPrice();
 
   const validatePrice = () => {
+    setMinimumPrice();
     const minPrice = Number(priceInput.getAttribute(`min`));
     const value = Number(priceInput.value);
 
     if (value < minPrice) {
       priceInput.setCustomValidity((`Минимальная стоимость - ${minPrice}`));
-    } else if (value > PriceLimits.MAX_PRICE) {
-      priceInput.setCustomValidity(`Стоимость не может быть выше ${PriceLimits.MAX_PRICE}`);
+    } else if (value > PriceLimit.MAX_PRICE) {
+      priceInput.setCustomValidity(`Стоимость не может быть выше ${PriceLimit.MAX_PRICE}`);
     } else {
       priceInput.setCustomValidity(``);
     }
@@ -99,32 +89,43 @@
 
   setRoomCapasity(roomNumber.value);
 
-  titleInput.addEventListener(`input`, () => {
-    validateTitle();
-  });
+  const addFormValidationHandlers = () => {
+    titleInput.addEventListener(`input`, validateTitle);
+    typeInput.addEventListener(`change`, validatePrice);
+    priceInput.addEventListener(`input`, validatePrice);
 
-  typeInput.addEventListener(`change`, () => {
+    timein.addEventListener(`change`, () => {
+      timeout.value = timein.value;
+    });
+
+    timeout.addEventListener(`change`, () => {
+      timein.value = timeout.value;
+    });
+
+    roomNumber.addEventListener(`change`, () => {
+      setRoomCapasity(roomNumber.value);
+    });
+  };
+
+  const formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    const data = new FormData(adForm);
+    window.server.send(data, window.formUploadSuccess.successUploadHandler, window.formUploadError.errorSubmitHandler);
+    adForm.removeEventListener(`submit`, window.form.formSubmitHandler);
+
+  };
+
+  const formReset = () => {
+    adForm.reset();
+    setAddress(mainPin, true);
     setMinimumPrice();
-    validatePrice();
-  });
-
-  priceInput.addEventListener(`input`, () => {
-    validatePrice();
-  });
-
-  timein.addEventListener(`change`, () => {
-    timeout.value = timein.value;
-  });
-
-  timeout.addEventListener(`change`, () => {
-    timein.value = timeout.value;
-  });
-
-  roomNumber.addEventListener(`change`, () => {
     setRoomCapasity(roomNumber.value);
-  });
+  };
 
   window.form = {
-    setAddress
+    setAddress,
+    formSubmitHandler,
+    addFormValidationHandlers,
+    formReset
   };
 })();
