@@ -20,9 +20,9 @@
     adForm.classList.remove(`ad-form--disabled`);
     map.classList.remove(`map--faded`);
     window.form.setAddress(mainPin);
-    window.pin.makePins(ADVERTISEMENTS_AMOUNT, window.data);
+    window.pin.makePins(ADVERTISEMENTS_AMOUNT, window.cutData);
     const pins = pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-    const data = window.data;
+    const data = window.cutData;
     pins.forEach((pin, index) => {
       pin.hidden = false;
       pin.addEventListener(`click`, () => {
