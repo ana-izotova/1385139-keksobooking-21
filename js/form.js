@@ -87,24 +87,36 @@
     capacity.value = value > 3 ? 0 : value;
   };
 
-  setRoomCapasity(roomNumber.value);
+  const setRoomCapacityByRoomNumber = () => setRoomCapasity(roomNumber.value);
+  setRoomCapacityByRoomNumber();
+
+  const timeinHandler = () => {
+    timeout.value = timein.value;
+  };
+  const timeoutHandler = () => {
+    timein.value = timeout.value;
+  };
 
   const addFormValidationHandlers = () => {
     titleInput.addEventListener(`input`, validateTitle);
     typeInput.addEventListener(`change`, validatePrice);
     priceInput.addEventListener(`input`, validatePrice);
 
-    timein.addEventListener(`change`, () => {
-      timeout.value = timein.value;
-    });
+    timein.addEventListener(`change`, timeinHandler);
+    timeout.addEventListener(`change`, timeoutHandler);
 
-    timeout.addEventListener(`change`, () => {
-      timein.value = timeout.value;
-    });
+    roomNumber.addEventListener(`change`, setRoomCapacityByRoomNumber);
+  };
 
-    roomNumber.addEventListener(`change`, () => {
-      setRoomCapasity(roomNumber.value);
-    });
+  const removeFormValidationHandlers = () => {
+    titleInput.removeEventListener(`input`, validateTitle);
+    typeInput.removeEventListener(`change`, validatePrice);
+    priceInput.removeEventListener(`input`, validatePrice);
+
+    timein.removeEventListener(`change`, timeinHandler);
+    timeout.removeEventListener(`change`, timeoutHandler);
+
+    roomNumber.removeEventListener(`change`, setRoomCapacityByRoomNumber);
   };
 
   const formSubmitHandler = (evt) => {
@@ -112,20 +124,20 @@
     const data = new FormData(adForm);
     window.server.send(data, window.formUploadSuccess.successUploadHandler, window.formUploadError.errorSubmitHandler);
     adForm.removeEventListener(`submit`, window.form.formSubmitHandler);
-
   };
 
   const formReset = () => {
     adForm.reset();
     setAddress(mainPin, true);
     setMinimumPrice();
-    setRoomCapasity(roomNumber.value);
+    setRoomCapacityByRoomNumber();
   };
 
   window.form = {
     setAddress,
     formSubmitHandler,
     addFormValidationHandlers,
+    removeFormValidationHandlers,
     formReset
   };
 })();

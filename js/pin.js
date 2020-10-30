@@ -9,6 +9,11 @@
     HEIGHT: 70
   };
 
+  const mainPinPosition = {
+    left: 603,
+    top: 408
+  };
+
   const pinTemplate = document.querySelector(`#pin`)
     .content
     .querySelector(`.map__pin`);
@@ -81,7 +86,8 @@
 
   window.pin = {
     makePins,
-    moveMainPin
+    moveMainPin,
+    mainPinPosition
   };
 })();
 
