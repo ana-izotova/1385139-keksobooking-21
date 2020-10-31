@@ -94,15 +94,83 @@
       });
     });
   };
-  //
-  // const filterByRoomsNumber = () => {
-  //
-  // };
-  //
-  // const filterByGuestsNumber = () => {
-  //
-  // };
-  //
+
+  const filterByRoomsNumber = () => {
+    const filterValue = roomsNumberFilter.value;
+    const data = window.data;
+    let filteredData;
+
+    if (filterValue === `any`) {
+      filteredData = data;
+    } else {
+      filteredData = data.filter((item) => item.offer.rooms === parseInt(filterValue, 10));
+    }
+
+    const filteredDataLength = filteredData.length;
+
+    filteredData = filteredDataLength > ADVERTISEMENTS_AMOUNT
+      ? filteredData.slice(0, ADVERTISEMENTS_AMOUNT)
+      : filteredData;
+    const pinsAmount = filteredDataLength > ADVERTISEMENTS_AMOUNT
+      ? ADVERTISEMENTS_AMOUNT
+      : filteredDataLength;
+
+    pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`)
+      .forEach((pin) => pin.remove());
+
+    if (map.querySelector(`.map__card`)) {
+      map.querySelector(`.map__card`).remove();
+    }
+
+    window.pin.makePins(pinsAmount, filteredData);
+    const pins = pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+
+    pins.forEach((pin, index) => {
+      pin.hidden = false;
+      pin.addEventListener(`click`, () => {
+        window.card.openPopup(filteredData[index]);
+      });
+    });
+  };
+
+  const filterByGuestsNumber = () => {
+    const filterValue = guestsNumberFilter.value;
+    const data = window.data;
+    let filteredData;
+
+    if (filterValue === `any`) {
+      filteredData = data;
+    } else {
+      filteredData = data.filter((item) => item.offer.guests === parseInt(filterValue, 10));
+    }
+
+    const filteredDataLength = filteredData.length;
+
+    filteredData = filteredDataLength > ADVERTISEMENTS_AMOUNT
+      ? filteredData.slice(0, ADVERTISEMENTS_AMOUNT)
+      : filteredData;
+    const pinsAmount = filteredDataLength > ADVERTISEMENTS_AMOUNT
+      ? ADVERTISEMENTS_AMOUNT
+      : filteredDataLength;
+
+    pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`)
+      .forEach((pin) => pin.remove());
+
+    if (map.querySelector(`.map__card`)) {
+      map.querySelector(`.map__card`).remove();
+    }
+
+    window.pin.makePins(pinsAmount, filteredData);
+    const pins = pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+
+    pins.forEach((pin, index) => {
+      pin.hidden = false;
+      pin.addEventListener(`click`, () => {
+        window.card.openPopup(filteredData[index]);
+      });
+    });
+  };
+
   // const filterByFeatures = () => {
   //
   // };
@@ -110,6 +178,8 @@
   const addFilersHandlers = () => {
     housingTypeFilter.addEventListener(`change`, filterByHousingType);
     housingPriceFilter.addEventListener(`change`, filterByHousingPrice);
+    roomsNumberFilter.addEventListener(`change`, filterByRoomsNumber);
+    guestsNumberFilter.addEventListener(`change`, filterByGuestsNumber);
   };
 
   window.filter = {
