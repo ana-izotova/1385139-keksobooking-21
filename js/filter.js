@@ -6,149 +6,80 @@
   const housingPriceFilter = filters.querySelector(`#housing-price`);
   const roomsNumberFilter = filters.querySelector(`#housing-rooms`);
   const guestsNumberFilter = filters.querySelector(`#housing-guests`);
-  const featuresFilter = filters.querySelector(`#housing-features`);
+  const featuresFilterContainer = filters.querySelector(`#housing-features`);
   const ADVERTISEMENTS_AMOUNT = 5;
   const map = document.querySelector(`.map`);
   const pinsContainer = map.querySelector(`.map__pins`);
 
-  const filterByHousingType = () => {
+  const filterByHousingType = (data) => {
     const filterValue = housingTypeFilter.value;
-    const data = window.data;
-    let filteredData;
+
     if (filterValue === `any`) {
-      filteredData = data;
+      return true;
     } else {
-      filteredData = data.filter((item) => item.offer.type === filterValue);
+      return data.offer.type === filterValue;
     }
-
-    const filteredDataLength = filteredData.length;
-
-    filteredData = filteredDataLength > ADVERTISEMENTS_AMOUNT
-      ? filteredData.slice(0, ADVERTISEMENTS_AMOUNT)
-      : filteredData;
-    const pinsAmount = filteredDataLength > ADVERTISEMENTS_AMOUNT
-      ? ADVERTISEMENTS_AMOUNT
-      : filteredDataLength;
-
-    pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`)
-      .forEach((pin) => pin.remove());
-
-    if (map.querySelector(`.map__card`)) {
-      map.querySelector(`.map__card`).remove();
-    }
-
-    window.pin.makePins(pinsAmount, filteredData);
-    const pins = pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-
-    pins.forEach((pin, index) => {
-      pin.hidden = false;
-      pin.addEventListener(`click`, () => {
-        window.card.openPopup(filteredData[index]);
-      });
-    });
   };
 
-  const filterByHousingPrice = () => {
+  const filterByHousingPrice = (data) => {
     const filterValue = housingPriceFilter.value;
-    const data = window.data;
-    let filteredData;
 
     switch (filterValue) {
-      case `any`:
-        filteredData = data;
-        break;
       case `middle`:
-        filteredData = data.filter((item) => item.offer.price >= 10000 && item.offer.price <= 50000);
-        break;
+        return (data.offer.price >= 10000 && data.offer.price <= 50000);
       case `low`:
-        filteredData = data.filter((item) => item.offer.price < 10000);
-        break;
+        return (data.offer.price < 10000);
       case `high`:
-        filteredData = data.filter((item) => item.offer.price > 50000);
-        break;
+        return (data.offer.price > 50000);
+      default:
+        return true;
     }
-
-    const filteredDataLength = filteredData.length;
-
-    filteredData = filteredDataLength > ADVERTISEMENTS_AMOUNT
-      ? filteredData.slice(0, ADVERTISEMENTS_AMOUNT)
-      : filteredData;
-    const pinsAmount = filteredDataLength > ADVERTISEMENTS_AMOUNT
-      ? ADVERTISEMENTS_AMOUNT
-      : filteredDataLength;
-
-    pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`)
-      .forEach((pin) => pin.remove());
-
-    if (map.querySelector(`.map__card`)) {
-      map.querySelector(`.map__card`).remove();
-    }
-
-    window.pin.makePins(pinsAmount, filteredData);
-    const pins = pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-
-    pins.forEach((pin, index) => {
-      pin.hidden = false;
-      pin.addEventListener(`click`, () => {
-        window.card.openPopup(filteredData[index]);
-      });
-    });
   };
 
-  const filterByRoomsNumber = () => {
+  const filterByRoomsNumber = (data) => {
     const filterValue = roomsNumberFilter.value;
-    const data = window.data;
-    let filteredData;
 
     if (filterValue === `any`) {
-      filteredData = data;
+      return true;
     } else {
-      filteredData = data.filter((item) => item.offer.rooms === parseInt(filterValue, 10));
+      return (data.offer.rooms === parseInt(filterValue, 10));
     }
-
-    const filteredDataLength = filteredData.length;
-
-    filteredData = filteredDataLength > ADVERTISEMENTS_AMOUNT
-      ? filteredData.slice(0, ADVERTISEMENTS_AMOUNT)
-      : filteredData;
-    const pinsAmount = filteredDataLength > ADVERTISEMENTS_AMOUNT
-      ? ADVERTISEMENTS_AMOUNT
-      : filteredDataLength;
-
-    pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`)
-      .forEach((pin) => pin.remove());
-
-    if (map.querySelector(`.map__card`)) {
-      map.querySelector(`.map__card`).remove();
-    }
-
-    window.pin.makePins(pinsAmount, filteredData);
-    const pins = pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-
-    pins.forEach((pin, index) => {
-      pin.hidden = false;
-      pin.addEventListener(`click`, () => {
-        window.card.openPopup(filteredData[index]);
-      });
-    });
   };
 
-  const filterByGuestsNumber = () => {
+  const filterByGuestsNumber = (data) => {
     const filterValue = guestsNumberFilter.value;
-    const data = window.data;
-    let filteredData;
 
     if (filterValue === `any`) {
-      filteredData = data;
+      return true;
     } else {
-      filteredData = data.filter((item) => item.offer.guests === parseInt(filterValue, 10));
+      return (data.offer.guests === parseInt(filterValue, 10));
     }
+  };
+
+  const filterByFeatures = (data) => {
+    const checkboxes = featuresFilterContainer.querySelectorAll(`:checked`);
+    if (checkboxes.length === 0) {
+      return true;
+    }
+    const filteredValues = Array.from(checkboxes).map((checkbox) => checkbox.value);
+    const difference = filteredValues.filter((feature) => !data.offer.features.includes(feature));
+    return (difference.length === 0);
+  };
+
+  const filterCollbacksArray = [filterByHousingType, filterByHousingPrice, filterByRoomsNumber, filterByGuestsNumber, filterByFeatures];
+
+  const mainFilter = () => {
+    const data = window.data;
+    let filteredData = filterCollbacksArray.reduce((acc, cb) => {
+      return acc.filter(cb);
+    }, data);
 
     const filteredDataLength = filteredData.length;
 
     filteredData = filteredDataLength > ADVERTISEMENTS_AMOUNT
       ? filteredData.slice(0, ADVERTISEMENTS_AMOUNT)
       : filteredData;
+
     const pinsAmount = filteredDataLength > ADVERTISEMENTS_AMOUNT
       ? ADVERTISEMENTS_AMOUNT
       : filteredDataLength;
@@ -171,18 +102,16 @@
     });
   };
 
-  // const filterByFeatures = () => {
-  //
-  // };
+  const addFilersHandler = () => {
+    filters.addEventListener(`change`, mainFilter);
+  };
 
-  const addFilersHandlers = () => {
-    housingTypeFilter.addEventListener(`change`, filterByHousingType);
-    housingPriceFilter.addEventListener(`change`, filterByHousingPrice);
-    roomsNumberFilter.addEventListener(`change`, filterByRoomsNumber);
-    guestsNumberFilter.addEventListener(`change`, filterByGuestsNumber);
+  const removeFiltersHandler = () => {
+    filters.removeEventListener(`change`, mainFilter);
   };
 
   window.filter = {
-    addFilersHandlers
+    addFilersHandler,
+    removeFiltersHandler
   };
 })();

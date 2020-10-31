@@ -23,6 +23,9 @@
     window.pin.makePins(ADVERTISEMENTS_AMOUNT, window.cutData);
     const pins = pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`);
     const data = window.cutData;
+    if (data) {
+      window.filter.addFilersHandler();
+    }
     pins.forEach((pin, index) => {
       pin.hidden = false;
       pin.addEventListener(`click`, () => {
@@ -75,6 +78,7 @@
     map.classList.add(`map--faded`);
     mainPin.style.cssText = `left: ${window.pin.mainPinPosition[`left`]}px; top: ${window.pin.mainPinPosition[`top`]}px`;
     mainPin.removeEventListener(`mousedown`, window.pin.moveMainPin);
+    window.filter.removeFiltersHandler();
   };
 
   deactivatePage();
