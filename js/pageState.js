@@ -20,9 +20,9 @@
     adForm.classList.remove(`ad-form--disabled`);
     map.classList.remove(`map--faded`);
     window.form.setAddress(mainPin);
-    window.pin.makePins(ADVERTISEMENTS_AMOUNT, window.data);
+    window.pin.makePins(ADVERTISEMENTS_AMOUNT, window.cutData);
     const pins = pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-    const data = window.data;
+    const data = window.cutData;
     pins.forEach((pin, index) => {
       pin.hidden = false;
       pin.addEventListener(`click`, () => {
@@ -66,13 +66,14 @@
     deactivateElements(adFormFieldsets);
     deactivateElements(mapFilters.children);
     addPageActivationHandlers();
+    window.form.removeFormValidationHandlers();
     const pins = pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`);
     if (pins) {
       pins.forEach((pin) => pin.remove());
     }
     adForm.classList.add(`ad-form--disabled`);
     map.classList.add(`map--faded`);
-    mainPin.style.cssText = `left: 603px; top: 408px`;
+    mainPin.style.cssText = `left: ${window.pin.mainPinPosition[`left`]}px; top: ${window.pin.mainPinPosition[`top`]}px`;
     mainPin.removeEventListener(`mousedown`, window.pin.moveMainPin);
   };
 
