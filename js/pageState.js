@@ -19,10 +19,10 @@
     activateElements(mapFilters.children);
     adForm.classList.remove(`ad-form--disabled`);
     map.classList.remove(`map--faded`);
+    const data = window.data.slice(0, ADVERTISEMENTS_AMOUNT);
     window.form.setAddress(mainPin);
-    window.pin.makePins(ADVERTISEMENTS_AMOUNT, window.cutData);
+    window.pin.makePins(data);
     const pins = pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-    const data = window.cutData;
     if (data) {
       window.filter.addFilersHandler();
     }
@@ -73,6 +73,9 @@
     const pins = pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`);
     if (pins) {
       pins.forEach((pin) => pin.remove());
+    }
+    if (map.querySelector(`.map__card`)) {
+      map.querySelector(`.map__card`).remove();
     }
     adForm.classList.add(`ad-form--disabled`);
     map.classList.add(`map--faded`);

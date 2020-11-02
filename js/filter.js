@@ -13,12 +13,7 @@
 
   const filterByHousingType = (data) => {
     const filterValue = housingTypeFilter.value;
-
-    if (filterValue === `any`) {
-      return true;
-    } else {
-      return data.offer.type === filterValue;
-    }
+    return filterValue === `any` ? true : data.offer.type === filterValue;
   };
 
   const filterByHousingPrice = (data) => {
@@ -38,22 +33,12 @@
 
   const filterByRoomsNumber = (data) => {
     const filterValue = roomsNumberFilter.value;
-
-    if (filterValue === `any`) {
-      return true;
-    } else {
-      return (data.offer.rooms === parseInt(filterValue, 10));
-    }
+    return filterValue === `any` ? true : (data.offer.rooms === parseInt(filterValue, 10));
   };
 
   const filterByGuestsNumber = (data) => {
     const filterValue = guestsNumberFilter.value;
-
-    if (filterValue === `any`) {
-      return true;
-    } else {
-      return (data.offer.guests === parseInt(filterValue, 10));
-    }
+    return filterValue === `any` ? true : (data.offer.guests === parseInt(filterValue, 10));
   };
 
   const filterByFeatures = (data) => {
@@ -70,19 +55,11 @@
 
   const mainFilter = () => {
     const data = window.data;
-    let filteredData = filterCollbacksArray.reduce((acc, cb) => {
+    const filteredData = filterCollbacksArray.reduce((acc, cb) => {
       return acc.filter(cb);
     }, data);
 
-    const filteredDataLength = filteredData.length;
-
-    filteredData = filteredDataLength > ADVERTISEMENTS_AMOUNT
-      ? filteredData.slice(0, ADVERTISEMENTS_AMOUNT)
-      : filteredData;
-
-    const pinsAmount = filteredDataLength > ADVERTISEMENTS_AMOUNT
-      ? ADVERTISEMENTS_AMOUNT
-      : filteredDataLength;
+    const slicedFilteredData = filteredData.slice(0, ADVERTISEMENTS_AMOUNT);
 
     pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`)
       .forEach((pin) => pin.remove());
@@ -91,23 +68,25 @@
       map.querySelector(`.map__card`).remove();
     }
 
-    window.pin.makePins(pinsAmount, filteredData);
+    window.pin.makePins(slicedFilteredData);
     const pins = pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`);
 
     pins.forEach((pin, index) => {
       pin.hidden = false;
       pin.addEventListener(`click`, () => {
-        window.card.openPopup(filteredData[index]);
+        window.card.openPopup(slicedFilteredData[index]);
       });
     });
   };
 
+  const debouncedFilter = window.debounce(mainFilter);
+
   const addFilersHandler = () => {
-    filters.addEventListener(`change`, mainFilter);
+    filters.addEventListener(`change`, debouncedFilter);
   };
 
   const removeFiltersHandler = () => {
-    filters.removeEventListener(`change`, mainFilter);
+    filters.removeEventListener(`change`, debouncedFilter);
   };
 
   window.filter = {

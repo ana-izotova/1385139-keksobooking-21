@@ -19,17 +19,17 @@
     .querySelector(`.map__pin`);
   const fragment = document.createDocumentFragment();
 
-  const makePins = (amount, cardsData) => {
-    for (let i = 0; i < amount; i += 1) {
+  const makePins = (cardsData) => {
+    cardsData.forEach((item) => {
       const newPin = pinTemplate.cloneNode(true);
       const pinImg = newPin.querySelector(`img`);
-      newPin.style.top = `${cardsData[i].location.y - PinSize.HEIGHT}px`;
-      newPin.style.left = `${cardsData[i].location.x - (PinSize.WIDTH / 2)}px`;
-      pinImg.src = cardsData[i].author.avatar;
-      pinImg.alt = cardsData[i].offer.title;
+      newPin.style.top = `${item.location.y - PinSize.HEIGHT}px`;
+      newPin.style.left = `${item.location.x - (PinSize.WIDTH / 2)}px`;
+      pinImg.src = item.author.avatar;
+      pinImg.alt = item.offer.title;
       newPin.hidden = true;
       fragment.appendChild(newPin);
-    }
+    });
 
     mapPins.appendChild(fragment);
   };
