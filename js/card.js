@@ -80,16 +80,25 @@
   };
 
   const closePopup = () => {
+    const activePins = map.querySelector(`.map__pin--active`);
+    if (activePins) {
+      activePins.classList.remove(`map__pin--active`);
+    }
     document.body.querySelector(`.map__card`).remove();
     document.removeEventListener(`keydown`, onPopupEscPress);
     document.removeEventListener(`click`, closePopup);
   };
 
-  const openPopup = (data) => {
+  const openPopup = (data, pin) => {
     if (map.querySelector(`.map__card`)) {
       map.querySelector(`.map__card`).remove();
     }
+    const activePins = map.querySelector(`.map__pin--active`);
+    if (activePins) {
+      activePins.classList.remove(`map__pin--active`);
+    }
     createCard(data);
+    pin.classList.add(`map__pin--active`);
     const cardPopup = map.querySelector(`.map__card`);
     const closePopupButton = cardPopup.querySelector(`.popup__close`);
     document.addEventListener(`keydown`, onPopupEscPress);

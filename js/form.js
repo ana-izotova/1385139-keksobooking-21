@@ -119,6 +119,33 @@
     roomNumber.removeEventListener(`change`, setRoomCapacityByRoomNumber);
   };
 
+  // const checkRequiredFields = () => {
+  //   const requiredFields = adForm.querySelectorAll(`[required]`);
+  //   requiredFields.forEach((field) => {
+  //     const isValidField = field.reportValidity();
+  //     console.log(isValidField)
+  //     if (!isValidField) {
+  //       field.style.cssText = `border: 2px solid red`;
+  //     }
+  //   });
+  // };
+
+  // const checkRequiredFields = () => {
+  //   console.log(`op`)
+  //   const formInputs = adForm.querySelectorAll(`input`);
+  //   console.log(formInputs)
+  //   let errorFlag;
+  //   formInputs.forEach((input) => {
+  //     const isValidField = input.checkValidity();
+  //     console.log(isValidField)
+  //     if (!isValidField) {
+  //       input.style.cssText = `border: 2px solid red`;
+  //       errorFlag = true;
+  //     }
+  //   });
+  //   return errorFlag;
+  // };
+
   const formSubmitHandler = (evt) => {
     evt.preventDefault();
     const data = new FormData(adForm);

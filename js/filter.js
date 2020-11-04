@@ -8,8 +8,6 @@
   const guestsNumberFilter = filters.querySelector(`#housing-guests`);
   const featuresFilterContainer = filters.querySelector(`#housing-features`);
   const ADVERTISEMENTS_AMOUNT = 5;
-  const map = document.querySelector(`.map`);
-  const pinsContainer = map.querySelector(`.map__pins`);
 
   const filterByHousingType = (data) => {
     const filterValue = housingTypeFilter.value;
@@ -52,14 +50,16 @@
   };
 
   const filterCollbacksArray = [filterByHousingType, filterByHousingPrice, filterByRoomsNumber, filterByGuestsNumber, filterByFeatures];
+  const map = document.querySelector(`.map`);
+  const pinsContainer = map.querySelector(`.map__pins`);
 
-  const mainFilter = () => {
+  const getFilteredData = () => {
     const data = window.data;
     const filteredData = filterCollbacksArray.reduce((acc, cb) => {
       return acc.filter(cb);
     }, data);
 
-    const slicedFilteredData = filteredData.slice(0, ADVERTISEMENTS_AMOUNT);
+    const filteredDataSliced = filteredData.slice(0, ADVERTISEMENTS_AMOUNT);
 
     pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`)
       .forEach((pin) => pin.remove());
@@ -68,18 +68,19 @@
       map.querySelector(`.map__card`).remove();
     }
 
-    window.pin.makePins(slicedFilteredData);
+    window.pin.makePins(filteredDataSliced);
     const pins = pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`);
 
     pins.forEach((pin, index) => {
       pin.hidden = false;
       pin.addEventListener(`click`, () => {
-        window.card.openPopup(slicedFilteredData[index]);
+        window.card.openPopup(filteredDataSliced[index], pin);
       });
     });
   };
 
-  const debouncedFilter = window.debounce(mainFilter);
+
+  const debouncedFilter = window.debounce(getFilteredData);
 
   const addFilersHandler = () => {
     filters.addEventListener(`change`, debouncedFilter);
@@ -88,6 +89,8 @@
   const removeFiltersHandler = () => {
     filters.removeEventListener(`change`, debouncedFilter);
   };
+
+  // const filterReset
 
   window.filter = {
     addFilersHandler,

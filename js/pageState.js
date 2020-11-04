@@ -29,7 +29,7 @@
     pins.forEach((pin, index) => {
       pin.hidden = false;
       pin.addEventListener(`click`, () => {
-        window.card.openPopup(data[index]);
+        window.card.openPopup(data[index], pin);
       });
     });
     window.form.addFormValidationHandlers();

@@ -4,9 +4,12 @@
   const map = document.querySelector(`.map`);
   const mainPin = map.querySelector(`.map__pin--main`);
   const mapPins = map.querySelector(`.map__pins`);
+  const pinsContainer = map.querySelector(`.map__pins`);
+
   const PinSize = {
     WIDTH: 50,
-    HEIGHT: 70
+    HEIGHT: 70,
+    NEEDLE: 16
   };
 
   const mainPinPosition = {
@@ -23,7 +26,7 @@
     cardsData.forEach((item) => {
       const newPin = pinTemplate.cloneNode(true);
       const pinImg = newPin.querySelector(`img`);
-      newPin.style.top = `${item.location.y - PinSize.HEIGHT}px`;
+      newPin.style.top = `${item.location.y - PinSize.HEIGHT - PinSize.NEEDLE}px`;
       newPin.style.left = `${item.location.x - (PinSize.WIDTH / 2)}px`;
       pinImg.src = item.author.avatar;
       pinImg.alt = item.offer.title;
@@ -84,10 +87,30 @@
     document.addEventListener(`mouseup`, onMouseUp);
   };
 
+  const drawPins = (data) => {
+    pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`)
+      .forEach((pin) => pin.remove());
+
+    if (map.querySelector(`.map__card`)) {
+      map.querySelector(`.map__card`).remove();
+    }
+
+    makePins(data);
+    const pins = pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+
+    pins.forEach((pin, index) => {
+      pin.hidden = false;
+      pin.addEventListener(`click`, () => {
+        window.card.openPopup(data[index], pin);
+      });
+    });
+  };
+
   window.pin = {
     makePins,
     moveMainPin,
-    mainPinPosition
+    mainPinPosition,
+    drawPins
   };
 })();
 
