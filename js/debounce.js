@@ -10,8 +10,7 @@
         window.clearTimeout(lastTimeout);
       }
       lastTimeout = window.setTimeout(() => {
-        // eslint-disable-next-line prefer-spread
-        func.apply(null, parameters);
+        func(parameters);
       }, DEBOUNCE_INTERVAL);
     };
   };

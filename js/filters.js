@@ -7,6 +7,7 @@
   const roomsNumberFilter = filters.querySelector(`#housing-rooms`);
   const guestsNumberFilter = filters.querySelector(`#housing-guests`);
   const featuresFilterContainer = filters.querySelector(`#housing-features`);
+  const selectFiltersArray = [housingTypeFilter, housingPriceFilter, roomsNumberFilter, guestsNumberFilter];
   const ADVERTISEMENTS_AMOUNT = 5;
 
   const filterByHousingType = (data) => {
@@ -31,12 +32,12 @@
 
   const filterByRoomsNumber = (data) => {
     const filterValue = roomsNumberFilter.value;
-    return filterValue === `any` ? true : (data.offer.rooms === parseInt(filterValue, 10));
+    return filterValue === `any` ? true : (data.offer.rooms === Number(filterValue));
   };
 
   const filterByGuestsNumber = (data) => {
     const filterValue = guestsNumberFilter.value;
-    return filterValue === `any` ? true : (data.offer.guests === parseInt(filterValue, 10));
+    return filterValue === `any` ? true : (data.offer.guests === Number(filterValue));
   };
 
   const filterByFeatures = (data) => {
@@ -44,14 +45,12 @@
     if (checkboxes.length === 0) {
       return true;
     }
-    const filteredValues = Array.from(checkboxes).map((checkbox) => checkbox.value);
+    const filteredValues = [...checkboxes].map((checkbox) => checkbox.value);
     const difference = filteredValues.filter((feature) => !data.offer.features.includes(feature));
     return (difference.length === 0);
   };
 
   const filterCollbacksArray = [filterByHousingType, filterByHousingPrice, filterByRoomsNumber, filterByGuestsNumber, filterByFeatures];
-  const map = document.querySelector(`.map`);
-  const pinsContainer = map.querySelector(`.map__pins`);
 
   const getFilteredData = () => {
     const data = window.data;
@@ -61,39 +60,32 @@
 
     const filteredDataSliced = filteredData.slice(0, ADVERTISEMENTS_AMOUNT);
 
-    pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`)
-      .forEach((pin) => pin.remove());
-
-    if (map.querySelector(`.map__card`)) {
-      map.querySelector(`.map__card`).remove();
-    }
-
-    window.pin.makePins(filteredDataSliced);
-    const pins = pinsContainer.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-
-    pins.forEach((pin, index) => {
-      pin.hidden = false;
-      pin.addEventListener(`click`, () => {
-        window.card.openPopup(filteredDataSliced[index], pin);
-      });
-    });
+    window.pins.render(filteredDataSliced);
   };
-
 
   const debouncedFilter = window.debounce(getFilteredData);
 
-  const addFilersHandler = () => {
+  const addChangeHandler = () => {
     filters.addEventListener(`change`, debouncedFilter);
   };
 
-  const removeFiltersHandler = () => {
+  const removeChangeHandler = () => {
     filters.removeEventListener(`change`, debouncedFilter);
   };
 
-  // const filterReset
+  const reset = () => {
+    selectFiltersArray.forEach((filter) => {
+      filter.value = `any`;
+    });
+    const checkboxes = featuresFilterContainer.querySelectorAll(`[type=checkbox]`);
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+  };
 
-  window.filter = {
-    addFilersHandler,
-    removeFiltersHandler
+  window.filters = {
+    addChangeHandler,
+    removeChangeHandler,
+    reset
   };
 })();

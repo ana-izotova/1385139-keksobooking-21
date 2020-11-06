@@ -7,29 +7,29 @@
   const newErrorMessage = errorMessageTemplate.cloneNode(true);
   const errorButton = newErrorMessage.querySelector(`.error__button`);
 
-  const onPopupEscPress = (evt) => {
+  const popupEscPressHandler = (evt) => {
     if (evt.key === `Escape`) {
       evt.preventDefault();
-      closePopup();
+      closePopupHandler();
     }
   };
 
-  const closePopup = () => {
+  const closePopupHandler = () => {
     document.body.querySelector(`.error`).remove();
-    document.removeEventListener(`keydown`, onPopupEscPress);
-    document.removeEventListener(`click`, closePopup);
-    errorButton.removeEventListener(`click`, closePopup);
+    document.removeEventListener(`keydown`, popupEscPressHandler);
+    document.removeEventListener(`click`, closePopupHandler);
+    errorButton.removeEventListener(`click`, closePopupHandler);
   };
 
-  const errorSubmitHandler = () => {
+  const submitHandler = () => {
     document.body.insertAdjacentElement(`afterbegin`, newErrorMessage);
-    errorButton.addEventListener(`click`, closePopup);
-    document.addEventListener(`keydown`, onPopupEscPress);
-    document.addEventListener(`click`, closePopup);
+    errorButton.addEventListener(`click`, closePopupHandler);
+    document.addEventListener(`keydown`, popupEscPressHandler);
+    document.addEventListener(`click`, closePopupHandler);
   };
 
   window.formUploadError = {
-    errorSubmitHandler
+    submitHandler
   };
 })();
 
