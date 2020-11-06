@@ -10,8 +10,6 @@
   const roomNumber = adForm.querySelector(`#room_number`);
   const capacity = adForm.querySelector(`#capacity`);
   const capacityOptions = capacity.querySelectorAll(`option`);
-  const map = document.querySelector(`.map`);
-  const mainPin = map.querySelector(`.map__pin--main`);
 
   const TitleLength = {
     MIN: 30,
@@ -35,13 +33,10 @@
 
   const addressField = document.querySelector(`#address`);
 
-  const setAddress = (pin, center = false) => {
-    addressField.value = window.map.findPinCoordinates(pin);
-    if (center) {
-      addressField.value = window.map.findPinCenterCoordinates(pin);
-    }
+  const setAddress = (active) => {
+    const value = window.mainPin.setCoordinates(active);
+    addressField.value = value.join(`, `);
   };
-  setAddress(mainPin, true);
 
   addressField.setAttribute(`readonly`, true);
 
@@ -97,7 +92,7 @@
     timein.value = timeout.value;
   };
 
-  const addFormValidationHandlers = () => {
+  const addValidationHandlers = () => {
     titleInput.addEventListener(`input`, validateTitle);
     typeInput.addEventListener(`change`, validatePrice);
     priceInput.addEventListener(`input`, validatePrice);
@@ -108,7 +103,7 @@
     roomNumber.addEventListener(`change`, setRoomCapacityByRoomNumber);
   };
 
-  const removeFormValidationHandlers = () => {
+  const removeValidationHandlers = () => {
     titleInput.removeEventListener(`input`, validateTitle);
     typeInput.removeEventListener(`change`, validatePrice);
     priceInput.removeEventListener(`input`, validatePrice);
@@ -119,25 +114,25 @@
     roomNumber.removeEventListener(`change`, setRoomCapacityByRoomNumber);
   };
 
-  const formSubmitHandler = (evt) => {
+  const submitHandler = (evt) => {
     evt.preventDefault();
     const data = new FormData(adForm);
-    window.server.send(data, window.formUploadSuccess.successUploadHandler, window.formUploadError.errorSubmitHandler);
-    adForm.removeEventListener(`submit`, window.form.formSubmitHandler);
+    window.server.send(data, window.formUploadSuccess.submitHandler, window.formUploadError.submitHandler);
+    adForm.removeEventListener(`submit`, window.form.submitHandler);
   };
 
-  const formReset = () => {
+  const resetForm = () => {
     adForm.reset();
-    setAddress(mainPin, true);
+    setAddress();
     setMinimumPrice();
     setRoomCapacityByRoomNumber();
   };
 
   window.form = {
     setAddress,
-    formSubmitHandler,
-    addFormValidationHandlers,
-    removeFormValidationHandlers,
-    formReset
+    submitHandler,
+    addValidationHandlers,
+    removeValidationHandlers,
+    reset: resetForm
   };
 })();

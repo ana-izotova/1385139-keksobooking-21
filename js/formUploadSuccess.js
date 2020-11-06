@@ -7,29 +7,28 @@
 
   const newSuccessMessage = successMessageTemplate.cloneNode(true);
 
-  const onPopupEscPress = (evt) => {
+  const popupEscPressHandler = (evt) => {
     if (evt.key === `Escape`) {
       evt.preventDefault();
-      closePopup();
+      closePopupHandler();
     }
   };
 
-  const closePopup = () => {
+  const closePopupHandler = () => {
     document.body.querySelector(`.success`).remove();
-    document.removeEventListener(`keydown`, onPopupEscPress);
-    document.removeEventListener(`click`, closePopup);
+    document.removeEventListener(`keydown`, popupEscPressHandler);
+    document.removeEventListener(`click`, closePopupHandler);
   };
 
-  const successUploadHandler = () => {
+  const submitHandler = () => {
     document.body.insertAdjacentElement(`afterbegin`, newSuccessMessage);
-    document.addEventListener(`keydown`, onPopupEscPress);
-    document.addEventListener(`click`, closePopup);
-    window.pageState.deactivatePage();
-    window.form.formReset();
+    document.addEventListener(`keydown`, popupEscPressHandler);
+    document.addEventListener(`click`, closePopupHandler);
+    window.pageState.deactivate();
   };
 
   window.formUploadSuccess = {
-    successUploadHandler
+    submitHandler
   };
 })();
 
