@@ -56,6 +56,7 @@
     removePageActivationHandlers();
     mainPin.addEventListener(`mousedown`, window.mainPin.move);
     resetFormButton.addEventListener(`click`, deactivate);
+    window.imageUpload.addHandlers();
   };
 
 
@@ -74,6 +75,7 @@
     window.form.reset();
     window.filters.reset();
     resetFormButton.removeEventListener(`click`, deactivate);
+    window.imageUpload.removeHandlers();
   };
 
   deactivate();

@@ -126,6 +126,9 @@
     setAddress();
     setMinimumPrice();
     setRoomCapacityByRoomNumber();
+    window.imageUpload.setDefaultAvatar();
+    window.imageUpload.removeUploadedPhoto();
+    adForm.removeEventListener(`submit`, window.form.submitHandler);
   };
 
   window.form = {
