@@ -55,12 +55,12 @@
     adForm.addEventListener(`submit`, window.form.submitHandler);
     removePageActivationHandlers();
     mainPin.addEventListener(`mousedown`, window.mainPin.move);
-    resetFormButton.addEventListener(`click`, deactivate);
+    resetFormButton.addEventListener(`click`, deactivatePage);
     window.imageUpload.addHandlers();
   };
 
 
-  const deactivate = () => {
+  const deactivatePage = () => {
     deactivateElements(adFormFieldsets);
     deactivateElements(mapFilters.children);
     addPageActivationHandlers();
@@ -74,13 +74,13 @@
     window.filters.removeChangeHandler();
     window.form.reset();
     window.filters.reset();
-    resetFormButton.removeEventListener(`click`, deactivate);
+    resetFormButton.removeEventListener(`click`, deactivatePage);
     window.imageUpload.removeHandlers();
   };
 
-  deactivate();
+  deactivatePage();
 
   window.pageState = {
-    deactivate
+    deactivate: deactivatePage
   };
 })();

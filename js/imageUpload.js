@@ -3,7 +3,6 @@
 (() => {
   const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
   const adForm = document.querySelector(`.ad-form`);
-
   const avatarChooser = adForm.querySelector(`.ad-form__field input[type=file]`);
   const avatarPreview = adForm.querySelector(`.ad-form-header__preview img`);
   const photoChooser = adForm.querySelector(`.ad-form__upload input[type=file]`);
@@ -20,7 +19,6 @@
       });
       if (matches) {
         const reader = new FileReader();
-
         reader.addEventListener(`load`, () => {
           if (preview === avatarPreview) {
             avatarPreview.src = reader.result;
@@ -52,7 +50,6 @@
   const removeUploadedPhoto = () => {
     photoPreview.innerHTML = ``;
   };
-
 
   window.imageUpload = {
     addHandlers: addFileUploadHandlers,
