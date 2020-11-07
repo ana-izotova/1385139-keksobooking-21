@@ -19,11 +19,12 @@ const imageUploadHandler = (fileChooser, preview) => {
     if (matches) {
       const reader = new FileReader();
       reader.addEventListener(`load`, () => {
+        const imageSrc = reader.result;
         if (preview === avatarPreview) {
-          avatarPreview.src = reader.result;
+          avatarPreview.src = imageSrc;
         }
         if (preview === photoPreview) {
-          photoPreview.innerHTML = `<img src='${reader.result}' width='70' height='70' alt='Фотография жилья'>`;
+          photoPreview.innerHTML = `<img src='${imageSrc}' width='70' height='70' alt='Фотография жилья'>`;
         }
       });
 
