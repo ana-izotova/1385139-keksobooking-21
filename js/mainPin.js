@@ -9,6 +9,11 @@ const MainPinSize = {
   TAIL: 22
 };
 
+const MapLimits = {
+  TOP: 130,
+  BOTTOM: 630,
+};
+
 const MainPinInitialPosition = {
   X: mainPin.style.left,
   Y: mainPin.style.top
@@ -33,20 +38,18 @@ const setMainPinCoordinates = (active = false) => {
 
 const moveMainPin = (evt) => {
   evt.preventDefault();
+
+  const {TOP, BOTTOM} = MapLimits;
+  const leftLimit = -Math.round(mainPin.offsetWidth / 2);
+  const rightLimit = map.offsetWidth - (mainPin.offsetWidth / 2);
+
   let StartCoords = {
     X: evt.pageX,
     Y: evt.pageY
   };
 
-  const onMouseMove = (moveEvt) => {
+  const mouseMoveHandler = (moveEvt) => {
     moveEvt.preventDefault();
-
-    const MapLimits = {
-      TOP: 130,
-      BOTTOM: 630,
-      left: -Math.round(mainPin.offsetWidth / 2),
-      right: map.offsetWidth - (mainPin.offsetWidth / 2)
-    };
 
     const Shift = {
       X: StartCoords.X - moveEvt.pageX,
@@ -59,11 +62,11 @@ const moveMainPin = (evt) => {
     let newCoordY = mainPin.offsetTop - Shift.Y;
     let newCoordX = mainPin.offsetLeft - Shift.X;
 
-    newCoordX = newCoordX < MapLimits.left ? MapLimits.left : newCoordX;
-    newCoordX = newCoordX > MapLimits.right ? MapLimits.right : newCoordX;
+    newCoordX = newCoordX < leftLimit ? leftLimit : newCoordX;
+    newCoordX = newCoordX > rightLimit ? rightLimit : newCoordX;
 
-    newCoordY = newCoordY < MapLimits.TOP ? MapLimits.TOP : newCoordY;
-    newCoordY = newCoordY > MapLimits.BOTTOM ? MapLimits.BOTTOM : newCoordY;
+    newCoordY = newCoordY < TOP ? TOP : newCoordY;
+    newCoordY = newCoordY > BOTTOM ? BOTTOM : newCoordY;
 
     mainPin.style.top = `${newCoordY}px`;
     mainPin.style.left = `${newCoordX}px`;
@@ -71,14 +74,14 @@ const moveMainPin = (evt) => {
     window.form.setAddress(true);
   };
 
-  const onMouseUp = (upEvt) => {
+  const mouseUpHandler = (upEvt) => {
     upEvt.preventDefault();
-    document.removeEventListener(`mousemove`, onMouseMove);
-    document.removeEventListener(`mouseup`, onMouseUp);
+    document.removeEventListener(`mousemove`, mouseMoveHandler);
+    document.removeEventListener(`mouseup`, mouseUpHandler);
   };
 
-  document.addEventListener(`mousemove`, onMouseMove);
-  document.addEventListener(`mouseup`, onMouseUp);
+  document.addEventListener(`mousemove`, mouseMoveHandler);
+  document.addEventListener(`mouseup`, mouseUpHandler);
 };
 
 window.mainPin = {

@@ -1,5 +1,6 @@
 'use strict';
 
+const ADVERTISEMENTS_AMOUNT = 5;
 const filters = document.querySelector(`.map__filters`);
 const housingTypeFilter = filters.querySelector(`#housing-type`);
 const housingPriceFilter = filters.querySelector(`#housing-price`);
@@ -7,7 +8,6 @@ const roomsNumberFilter = filters.querySelector(`#housing-rooms`);
 const guestsNumberFilter = filters.querySelector(`#housing-guests`);
 const featuresFilterContainer = filters.querySelector(`#housing-features`);
 const selectFiltersArray = [housingTypeFilter, housingPriceFilter, roomsNumberFilter, guestsNumberFilter];
-const ADVERTISEMENTS_AMOUNT = 5;
 
 const filterByHousingType = (data) => {
   const filterValue = housingTypeFilter.value;

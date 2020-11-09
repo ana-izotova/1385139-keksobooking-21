@@ -1,5 +1,6 @@
 'use strict';
 
+const ADVERTISEMENTS_AMOUNT = 5;
 const map = document.querySelector(`.map`);
 const adForm = document.querySelector(`.ad-form`);
 const resetFormButton = adForm.querySelector(`.ad-form__reset`);
@@ -7,7 +8,6 @@ const adFormFieldsets = adForm.querySelectorAll(`fieldset`);
 const mapFilters = map.querySelector(`.map__filters`);
 const mainPin = map.querySelector(`.map__pin--main`);
 const mainButtonMouseEventCode = 0;
-const ADVERTISEMENTS_AMOUNT = 5;
 
 const activatePageOnMousedownHandler = (evt) => {
   if (evt.button === mainButtonMouseEventCode) {

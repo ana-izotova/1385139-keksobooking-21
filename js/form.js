@@ -23,7 +23,7 @@ const PriceLimit = {
   MAX_PRICE: 1000000
 };
 
-const roomForGuestsMap = {
+const RoomForGuestsMap = {
   1: [`1`],
   2: [`1`, `2`],
   3: [`1`, `2`, `3`],
@@ -76,7 +76,7 @@ const validatePrice = () => {
 
 const setRoomCapasity = (value) => {
   capacityOptions.forEach((option) => {
-    option.disabled = !roomForGuestsMap[value].includes(option.value);
+    option.disabled = !RoomForGuestsMap[value].includes(option.value);
   });
   capacity.value = value > 3 ? 0 : value;
 };
@@ -116,7 +116,10 @@ const removeValidationHandlers = () => {
 const submitHandler = (evt) => {
   evt.preventDefault();
   const data = new FormData(adForm);
-  window.server.send(data, window.formUploadSuccess.submitHandler, window.formUploadError.submitHandler);
+  window.server.configure(window.formUploadSuccess.submitHandler,
+      window.formUploadError.submitHandler,
+      window.server.HttpRequestMethod.POST,
+      data);
   adForm.removeEventListener(`submit`, window.form.submitHandler);
 };
 
@@ -125,8 +128,7 @@ const resetForm = () => {
   setAddress();
   setMinimumPrice();
   setRoomCapacityByRoomNumber();
-  window.imageUpload.setDefaultAvatar();
-  window.imageUpload.removeUploadedPhoto();
+  window.imageUpload.reset();
   adForm.removeEventListener(`submit`, window.form.submitHandler);
 };
 

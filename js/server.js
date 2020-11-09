@@ -9,14 +9,23 @@ const StatusCode = {
 };
 
 const HttpRequestMethod = {
-  LOAD: `GET`,
-  SEND: `POST`
+  GET: `GET`,
+  POST: `POST`
 };
 
 const TIMEOUT_IN_MS = 10000;
 
-const server = (xhr, onSuccess, onError) => {
+const configureServer = (onSuccess, onError, method = HttpRequestMethod.GET, data) => {
+  const xhr = new XMLHttpRequest();
   xhr.responseType = `json`;
+
+  if (method === HttpRequestMethod.POST) {
+    xhr.open(HttpRequestMethod.POST, Url.SEND);
+    xhr.send(data);
+  } else {
+    xhr.open(HttpRequestMethod.GET, Url.LOAD);
+    xhr.send();
+  }
 
   xhr.addEventListener(`load`, () => {
     if (xhr.status === StatusCode.OK) {
@@ -35,23 +44,7 @@ const server = (xhr, onSuccess, onError) => {
   xhr.timeout = TIMEOUT_IN_MS;
 };
 
-const load = (onSuccess, onError) => {
-  const xhrLoad = new XMLHttpRequest();
-
-  xhrLoad.open(HttpRequestMethod.LOAD, Url.LOAD);
-  server(xhrLoad, onSuccess, onError);
-  xhrLoad.send();
-};
-
-const send = (data, onSuccess, onError) => {
-  const xhrSend = new XMLHttpRequest();
-
-  xhrSend.open(HttpRequestMethod.SEND, Url.SEND);
-  server(xhrSend, onSuccess, onError);
-  xhrSend.send(data);
-};
-
 window.server = {
-  load,
-  send
+  HttpRequestMethod,
+  configure: configureServer
 };

@@ -24,7 +24,7 @@ const imageUploadHandler = (fileChooser, preview) => {
           avatarPreview.src = imageSrc;
         }
         if (preview === photoPreview) {
-          photoPreview.innerHTML = `<img src='${imageSrc}' width='70' height='70' alt='Фотография жилья'>`;
+          photoPreview.insertAdjacentHTML(`afterbegin`, `<img src='${imageSrc}' width='70' height='70' alt='Фотография жилья'>`);
         }
       });
 
@@ -43,17 +43,16 @@ const removeFileUploadHandlers = () => {
   photoChooser.removeEventListener(`change`, imageUploadHandler(photoChooser, photoPreview));
 };
 
-const setDefaultAvatar = () => {
+const resetUploadedImage = () => {
   avatarPreview.src = defaultAvatar;
-};
 
-const removeUploadedPhoto = () => {
-  photoPreview.innerHTML = ``;
+  if (photoPreview.children.length > 0) {
+    photoPreview.querySelector(`img`).remove();
+  }
 };
 
 window.imageUpload = {
   addHandlers: addFileUploadHandlers,
   removeHandlers: removeFileUploadHandlers,
-  setDefaultAvatar,
-  removeUploadedPhoto
+  reset: resetUploadedImage
 };

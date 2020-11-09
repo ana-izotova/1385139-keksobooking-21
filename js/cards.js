@@ -9,7 +9,7 @@ const cardTemplate = document.querySelector(`#card`)
   .content
   .querySelector(`.map__card`);
 
-const apartmentsTypeMap = {
+const ApartmentsTypeMap = {
   palace: `Дворец`,
   flat: `Квартира`,
   house: `Дом`,
@@ -70,7 +70,7 @@ const create = (data) => {
   priceElement.textContent = price ? `${price}₽/ночь` : priceElement.remove();
 
   const typeElement = newCard.querySelector(`.popup__type`);
-  typeElement.textContent = type ? apartmentsTypeMap[type] : typeElement.remove();
+  typeElement.textContent = type ? ApartmentsTypeMap[type] : typeElement.remove();
 
   let roomsQuantity = (rooms === 1) ? `комната` : `комнаты`;
   let guestsQuantity = (guests === 1) ? `гостя` : `гостей`;
