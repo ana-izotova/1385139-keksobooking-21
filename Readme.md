@@ -3,7 +3,7 @@
 * Студент: [Анастасия](https://up.htmlacademy.ru/javascript/21/user/1385139).
 * Наставник: [Вадим Новаш](https://htmlacademy.ru/profile/stakeout).
 
-Сборка: [https://keksobooking-ana-izotova.vercel.app](Кексобукинг)
+Сборка: [Кексобукинг](https://keksobooking-ana-izotova.vercel.app)
 
 ---
 
